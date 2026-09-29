@@ -134,3 +134,22 @@ body {
   color: #666666;
   font-size: 13px;
 }
+
+#filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px;
+}
+
+#filters button {
+  padding: 10px 20px;
+  border: 1px solid black;
+  background-color: white;
+  cursor: pointer;
+}
+
+#filters button:hover {
+  background-color: black;
+  color: white;
+}

@@ -1,32 +1,13 @@
-const products = [
-  {
-    id: 1,
-    name: "Dress",
-    price: 499,
-    image: "./img/kjole.png",
-    category: "Clothing",
-    offer: false,
-    soldout: true,
-  },
-  {
-    id: 2,
-    name: "T-shirt",
-    price: 299,
-    image: "./img/tshirt.png",
-    category: "Clothing",
-    offer: false,
-    soldout: true,
-  },
-  {
-    id: 3,
-    name: "Shoe",
-    price: 899,
-    image: "./img/sko.png",
-    category: "Shoes",
-    offer: false,
-    soldout: true,
-  },
-];
+let products = [];
+
+const endpoint = `https://kea-alt-del.dk/t7/api/products?limit=30`;
+
+fetch(endpoint)
+  .then((res) => res.json())
+  .then((data) => {
+    products = data;
+    showProducts(products);
+  });
 
 const params = new URLSearchParams(window.location.search);
 const category = params.get("category");
@@ -34,30 +15,48 @@ const category = params.get("category");
 console.log(category);
 
 const productList = document.querySelector("#product-list");
+const filterButtons = document.querySelectorAll("#filters button");
+filterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const filter = button.dataset.filter;
 
-const filteredProducts = products.filter(
-  (product) => product.category === category,
-);
+    if (filter === "all") {
+      showProducts(products);
+    } else {
+      const filteredProducts = products.filter(
+        (product) => product.category.toLowerCase() === filter,
+      );
 
-filteredProducts.forEach((product) => {
-  let status = "";
+      showProducts(filteredProducts);
+    }
+  });
+});
 
-  if (product.offer) {
-    status += `<span class="offer">Tilbud</span>`;
-  }
+function showProducts(productsToShow) {
+  productList.innerHTML = "";
 
-  if (product.soldout) {
-    status += `<span class="soldout">Udsolgt</span>`;
-  }
+  productsToShow.forEach((product) => {
+    let status = "";
 
-  productList.innerHTML += `
+    if (product.discount) {
+      status += `<span class="offer">Tilbud</span>`;
+    }
+
+    if (product.soldout) {
+      status += `<span class="soldout">Udsolgt</span>`;
+    }
+
+    productList.innerHTML += `
   <article class="product-card">
     <a href="productdetails.html?id=${product.id}&category=${product.category}">
-      <img src="${product.image}" alt="${product.name}">
-      <h2>${product.name}</h2>
+      <img src="https://kea-alt-del.dk/t7/images/webp/640/${product.id}.webp" alt="${product.productdisplayname}">
+      <h2>${product.productdisplayname}</h2>
       <p>${product.price} kr.</p>
       ${status}
     </a>
   </article>
 `;
-});
+  });
+}
+
+showProducts(products);
