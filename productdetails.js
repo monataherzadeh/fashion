@@ -21,6 +21,7 @@ const products = [
 
 const productId = new URLSearchParams(window.location.search);
 const endpoint = Number(productId.get("id"));
+const category = productId.get("category");
 
 const product = products.find((product) => product.id === endpoint);
 
@@ -38,7 +39,7 @@ productDetails.innerHTML = `
       <h1>${product.name}</h1>
       <p class="product-price">${product.price} kr.</p>
 
-      <a class="back-link" href="productlist.html">← Back to products</a>
+      <a class="back-link" href="productlist.html?category=${category}">← Back to products</a>
     </div>
   </article>
 `;
