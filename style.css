@@ -116,3 +116,21 @@ body {
 .category-back:hover {
   text-decoration: underline;
 }
+
+.offer {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #e8f0e8;
+  color: #2f5d3a;
+  font-size: 13px;
+}
+
+.soldout {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #eeeeee;
+  color: #666666;
+  font-size: 13px;
+}
