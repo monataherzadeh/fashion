@@ -6,11 +6,28 @@ fetch(endpoint)
   .then((res) => res.json())
   .then((data) => {
     products = data;
-    showProducts(products);
+
+    if (category) {
+      const apiCategory = categoryMap[category];
+
+      const filteredProducts = products.filter(
+        (product) => product.category === apiCategory,
+      );
+
+      showProducts(filteredProducts);
+    } else {
+      showProducts(products);
+    }
   });
 
 const params = new URLSearchParams(window.location.search);
 const category = params.get("category");
+
+const categoryMap = {
+  Clothing: "Apparel",
+  Shoes: "Footwear",
+  Accessories: "Accessories",
+};
 
 console.log(category);
 
