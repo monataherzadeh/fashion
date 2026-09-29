@@ -5,6 +5,8 @@ const products = [
     price: 499,
     image: "./img/kjole.png",
     category: "Clothing",
+    offer: false,
+    soldout: true,
   },
   {
     id: 2,
@@ -12,6 +14,8 @@ const products = [
     price: 299,
     image: "./img/tshirt.png",
     category: "Clothing",
+    offer: false,
+    soldout: true,
   },
   {
     id: 3,
@@ -19,6 +23,8 @@ const products = [
     price: 899,
     image: "./img/sko.png",
     category: "Shoes",
+    offer: false,
+    soldout: true,
   },
 ];
 
@@ -34,13 +40,24 @@ const filteredProducts = products.filter(
 );
 
 filteredProducts.forEach((product) => {
+  let status = "";
+
+  if (product.offer) {
+    status += `<span class="offer">Tilbud</span>`;
+  }
+
+  if (product.soldout) {
+    status += `<span class="soldout">Udsolgt</span>`;
+  }
+
   productList.innerHTML += `
-    <article class="product-card">
-      <a href="productdetails.html?id=${product.id}&category=${product.category}">
-        <img src="${product.image}" alt="${product.name}">
-        <h2>${product.name}</h2>
-        <p>${product.price} kr.</p>
-      </a>
-    </article>
-  `;
+  <article class="product-card">
+    <a href="productdetails.html?id=${product.id}&category=${product.category}">
+      <img src="${product.image}" alt="${product.name}">
+      <h2>${product.name}</h2>
+      <p>${product.price} kr.</p>
+      ${status}
+    </a>
+  </article>
+`;
 });
