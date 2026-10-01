@@ -1,4 +1,5 @@
 let products = [];
+let displayedProducts = [];
 
 const endpoint = `https://kea-alt-del.dk/t7/api/products?limit=30`;
 
@@ -10,13 +11,14 @@ fetch(endpoint)
     if (category) {
       const apiCategory = categoryMap[category];
 
-      const filteredProducts = products.filter(
+      displayedProducts = products.filter(
         (product) => product.category === apiCategory,
       );
 
-      showProducts(filteredProducts);
+      showProducts(displayedProducts);
     } else {
-      showProducts(products);
+      displayedProducts = products;
+      showProducts(displayedProducts);
     }
   });
 
@@ -33,18 +35,50 @@ console.log(category);
 
 const productList = document.querySelector("#product-list");
 const filterButtons = document.querySelectorAll("#filters button");
+const sortButtons = document.querySelectorAll("#sorting button");
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const filter = button.dataset.filter;
 
     if (filter === "all") {
-      showProducts(products);
+      displayedProducts = products;
+      showProducts(displayedProducts);
     } else {
-      const filteredProducts = products.filter(
+      displayedProducts = products.filter(
         (product) => product.category.toLowerCase() === filter,
       );
 
-      showProducts(filteredProducts);
+      showProducts(displayedProducts);
+    }
+  });
+});
+
+sortButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const sort = button.dataset.sort;
+
+    if (sort === "price-asc") {
+      displayedProducts.sort((a, b) => a.price - b.price);
+      showProducts(displayedProducts);
+    }
+
+    if (sort === "price-desc") {
+      displayedProducts.sort((a, b) => b.price - a.price);
+      showProducts(displayedProducts);
+    }
+
+    if (sort === "name-asc") {
+      displayedProducts.sort((a, b) =>
+        a.productdisplayname.localeCompare(b.productdisplayname),
+      );
+      showProducts(displayedProducts);
+    }
+
+    if (sort === "name-desc") {
+      displayedProducts.sort((a, b) =>
+        b.productdisplayname.localeCompare(a.productdisplayname),
+      );
+      showProducts(displayedProducts);
     }
   });
 });
