@@ -1,45 +1,33 @@
-const products = [
-  {
-    id: 1,
-    name: "Dress",
-    price: 499,
-    image: "./img/kjole.png",
-  },
-  {
-    id: 2,
-    name: "T-shirt",
-    price: 299,
-    image: "./img/tshirt.png",
-  },
-  {
-    id: 3,
-    name: "Shoe",
-    price: 899,
-    image: "./img/sko.png",
-  },
-];
-
 const productId = new URLSearchParams(window.location.search);
 const endpoint = Number(productId.get("id"));
 const category = productId.get("category");
+const categoryMap = {
+  Apparel: "Clothing",
+  Footwear: "Shoes",
+  Accessories: "Accessories",
+};
 
-const product = products.find((product) => product.id === endpoint);
+const backCategory = categoryMap[category] || "";
 
-console.log(product);
+const apiUrl = `https://kea-alt-del.dk/t7/api/products/${endpoint}`;
 
 const productDetails = document.querySelector("#product-details");
 
-productDetails.innerHTML = `
-  <article class="product-detail">
-    <div class="product-image">
-      <img src="${product.image}" alt="${product.name}">
-    </div>
+fetch(apiUrl)
+  .then((res) => res.json())
+  .then((product) => {
+    productDetails.innerHTML = `
+      <article class="product-detail">
+        <div class="product-image">
+          <img src="https://kea-alt-del.dk/t7/images/webp/640/${product.id}.webp" alt="${product.productdisplayname}">
+        </div>
 
-    <div class="product-info">
-      <h1>${product.name}</h1>
-      <p class="product-price">${product.price} kr.</p>
+        <div class="product-info">
+          <h1>${product.productdisplayname}</h1>
+          <p class="product-price">${product.price} kr.</p>
 
-      <a class="back-link" href="productlist.html?category=${category}">← Back to products</a>
-    </div>
-  </article>
-`;
+          <a class="back-link" href="productlist.html?category=${backCategory}">← Back to products</a>
+        </div>
+      </article>
+    `;
+  });
